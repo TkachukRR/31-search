@@ -1,0 +1,31 @@
+.search {
+  &__list{
+    display: flex;
+    list-style: none;
+  }
+  &__item{
+    display: flex;
+    justify-content: center;
+    min-width: 60px;
+
+    padding: 5px 10px;
+    margin: 5px;
+
+    border: 1px solid #02f102;
+    border-radius: 4px;
+
+    cursor: pointer;
+  }
+
+  &__btn-edit{
+    margin-left: 12px;
+    padding: 5px 10px;
+
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  &__btn-del{
+    cursor: pointer;
+  }
+}

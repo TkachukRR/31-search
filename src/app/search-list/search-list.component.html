@@ -1,6 +1,9 @@
-<ul class="search__list">
-  <li class="search__item" *ngFor="let item of this.searchStorage.searchingList">
-    {{item.value}}
-    <button type="button" (click)="removeSearch($event)" [id]="item.date">x</button>
-  </li>
-</ul>
+<div *ngIf="this.searchStorage.searchingList.length" class="wrapper">
+  <ul class="search__list">
+    <li class="search__item" *ngFor="let item of this.searchStorage.searchingList">
+      {{item.value}}
+      <button class="search__btn-del" type="button" (click)="removeSearch($event)" [id]="item.date" *ngIf="editMode">x</button>
+    </li>
+  </ul>
+  <button class="search__btn-edit" type="button" (click)="editSearchList()">Edit</button>
+</div>
