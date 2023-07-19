@@ -10,10 +10,16 @@ const LOCAL_STORAGE_KEY = "SEARCH_LIST"
 
 export class SearchStorageService {
   private _localStorage = inject(LocalStorageService);
+  public searchingList: any
 
   public addNewSearch(search: Searching): void{
-    const searchList = this._localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!searchList) this._localStorage.setItem(LOCAL_STORAGE_KEY, [search])
-    else this._localStorage.setItem(LOCAL_STORAGE_KEY, [search, ...searchList])
+    if (!this.searchingList) this.searchingList = [search]
+    else this.searchingList = [search, ...this.searchingList]
+
+    this._localStorage.setItem(LOCAL_STORAGE_KEY, this.searchingList);
+  }
+
+  constructor() {
+    this.searchingList = this._localStorage.getItem(LOCAL_STORAGE_KEY);
   }
 }

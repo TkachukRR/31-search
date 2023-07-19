@@ -1,3 +1,5 @@
 <ul class="search__list">
-  <li class="search__item" *ngFor="let item of searchList"></li>
+  <li class="search__item" *ngFor="let item of this.searchStorage.searchingList">
+    {{item.value}}
+  </li>
 </ul>
