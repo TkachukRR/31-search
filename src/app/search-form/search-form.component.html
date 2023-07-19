@@ -1,1 +1,4 @@
-<p>search-form works!</p>
+<form [formGroup]="searchingForm">
+  <input type="text" formControlName="value" placeholder="Search...">
+  <button type="submit" (click)="onSubmit()">Search</button>
+</form>
