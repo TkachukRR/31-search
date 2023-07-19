@@ -1,15 +1,9 @@
-import { inject, Injectable } from '@angular/core';
-
-interface Search {
-  userName: string;
-  searchValue: string;
-  date: number[];
-  quantity: number;
-}
+import { Injectable } from '@angular/core';
+import { Searching } from "./interfaces";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchStorageService {
-  private _searchStorage: Search[] = []
+  private _searchStorage!: Searching[]
 }
