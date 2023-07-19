@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./search-list.component.scss']
 })
 export class SearchListComponent {
-
+  public searchList = []
 }
