@@ -25,6 +25,7 @@ export class SearchFormComponent {
       date: this.searchingForm.get('date')?.value || 0  //TODO
     }
     this._searchStorage.addNewSearch(search);
+    this.searchingForm.reset()
   }
 
   private setActualFormDate(){
