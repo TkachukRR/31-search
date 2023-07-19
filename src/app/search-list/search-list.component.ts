@@ -8,4 +8,9 @@ import { SearchStorageService } from "../services/search-storage.service";
 })
 export class SearchListComponent {
   public searchStorage = inject(SearchStorageService)
+
+  public removeSearch(event: any) {
+    const id = event.target.id;
+    this.searchStorage.removeSearch(+id);
+  }
 }

@@ -19,6 +19,11 @@ export class SearchStorageService {
     this._localStorage.setItem(LOCAL_STORAGE_KEY, this.searchingList);
   }
 
+  public removeSearch(date: number){
+    this.searchingList = this.searchingList.filter((search: Searching) => search.date !== date)
+    this._localStorage.setItem(LOCAL_STORAGE_KEY, this.searchingList);
+  }
+
   constructor() {
     this.searchingList = this._localStorage.getItem(LOCAL_STORAGE_KEY);
   }

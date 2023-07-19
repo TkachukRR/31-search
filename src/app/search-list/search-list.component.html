@@ -1,5 +1,6 @@
 <ul class="search__list">
   <li class="search__item" *ngFor="let item of this.searchStorage.searchingList">
     {{item.value}}
+    <button type="button" (click)="removeSearch($event)" [id]="item.date">x</button>
   </li>
 </ul>
