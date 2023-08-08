@@ -1,6 +1,8 @@
 <div class="wrapper">
   <form [formGroup]="searchingForm" class="search__form" >
-    <input  class="search__input" type="text" formControlName="value" placeholder="Search...">
-    <button  class="search__btn" type="submit" (click)="onSubmit()">Search</button>
+    <input  class="search__input" type="text" formControlName="searchValue" placeholder="Search...">
+    <button  class="search__btn" type="submit" (click)="onSubmit()" [disabled]="false">Search</button>
   </form>
 </div>
+<p>
+</p>

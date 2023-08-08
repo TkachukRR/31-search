@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { SearchStorageService } from "../services/search-storage.service";
 
 @Component({
@@ -6,16 +6,11 @@ import { SearchStorageService } from "../services/search-storage.service";
   templateUrl: './search-list.component.html',
   styleUrls: ['./search-list.component.scss']
 })
-export class SearchListComponent {
+export class SearchListComponent implements OnInit{
   public searchStorage = inject(SearchStorageService)
-  public editMode = false;
+  public searchList = this.searchStorage.getSortedByPopularity()
 
-  public removeSearch(event: any) {
-    const id = event.target.id;
-    this.searchStorage.removeSearch(+id);
-  }
-
-  public editSearchList() {
-    this.editMode = !this.editMode
+  public ngOnInit(): void {
+    console.log(this.searchStorage.getSortedByPopularity())
   }
 }

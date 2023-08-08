@@ -1,7 +1,13 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder } from "@angular/forms";
+import { Component, effect, inject, signal } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { SearchStorageService } from "../services/search-storage.service";
 import { Searching } from "../services/interfaces";
+import { LocalStorageService } from "../services/local-storage.service";
+import { of } from "rxjs";
+
+interface Search {
+  searchValue: FormControl
+}
 
 @Component({
   selector: 'app-search-form',
@@ -10,25 +16,22 @@ import { Searching } from "../services/interfaces";
 })
 export class SearchFormComponent {
   private _formBuilder = inject(FormBuilder);
-  private _searchStorage = inject(SearchStorageService);
+  private _searchService = inject(SearchStorageService);
 
-  public searchingForm = this._formBuilder.nonNullable.group({
-      value: this._formBuilder.nonNullable.control<string>(''),
-      date: this._formBuilder.nonNullable.control<number>(0)
+  public searchingForm: FormGroup<Search> = this._formBuilder.nonNullable.group({
+      searchValue: this._formBuilder.nonNullable.control<string>(''),
     }
   )
 
   public onSubmit(){
-    this.setActualFormDate();
-    const search: Searching = {
-      value: this.searchingForm.get('value')?.value || '', //TODO
-      date: this.searchingForm.get('date')?.value || 0  //TODO
-    }
-    this._searchStorage.addNewSearch(search);
-    this.searchingForm.reset()
-  }
+    const value = this.searchingForm.get('searchValue')?.value.replace(/\s+/g, ' ').trim().toLowerCase()
 
-  private setActualFormDate(){
-    this.searchingForm.controls.date.patchValue(Date.now())
+    const newSearch: Searching = {
+      value,
+      date: Date.now()
+    }
+
+    this._searchService.addToSearches(newSearch)
+    this.searchingForm.reset()
   }
 }
