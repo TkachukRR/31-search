@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { LocalStorageService } from "./local-storage.service";
+import { BehaviorSubject, Observable } from "rxjs";
 
 const LOCAL_STORAGE_KEY = "SEARCH_LIST"
 
@@ -9,9 +10,13 @@ const LOCAL_STORAGE_KEY = "SEARCH_LIST"
 
 export class SearchStorageService{
   private _localStorage = inject(LocalStorageService);
-  private _searches: any = this._localStorage.getItem(LOCAL_STORAGE_KEY) || {}
-
+  private _searches: any = new BehaviorSubject<any>(this._localStorage.getItem(LOCAL_STORAGE_KEY) || {})
+  public searches$ = this._searches.asObservable()
   public loading = false;
+
+  public updateSearches(){
+    this._searches.next(this._searches.getValue())
+  }
 
   public getSearches() {
       return this._searches
@@ -19,28 +24,27 @@ export class SearchStorageService{
 
   public addToSearches(search : {value: string, date: number}) {
     this.loading = true;
-    if (this._searches[search.value]) {
-      this._searches[search.value].unshift(search.date)
-    } else {
-      this._searches[search.value] = [search.date]
-    }
-    this._localStorage.setItem(LOCAL_STORAGE_KEY, this._searches)
+    if (this._searches.getValue()[search.value]) this._searches.getValue()[search.value].unshift(search.date)
+    else this._searches.getValue()[search.value] = [search.date]
+
+    this._localStorage.setItem(LOCAL_STORAGE_KEY, this._searches.getValue())
+    this.updateSearches();
     this.loading = false;
   }
 
   public removeSearch(searchVal: string, searchDate: string) {
     this.loading = true;
-    this._searches[searchVal] = this._searches[searchVal].filter((date: number) => date !== +searchDate)
-
-    this._localStorage.setItem(LOCAL_STORAGE_KEY, this._searches)
+    this._searches.getValue()[searchVal] = this._searches.getValue()[searchVal].filter((date: number) => date !== +searchDate)
+    this._localStorage.setItem(LOCAL_STORAGE_KEY, this._searches.getValue())
+    this.updateSearches();
     this.loading = false;
   }
 
   public getSortedByPopularity() {
     const sortedMap = new Map<string, number[]>();
 
-    Object.keys(this._searches).forEach(key => {
-      sortedMap.set(key, this._searches[key]);
+    Object.keys(this._searches.getValue()).forEach(key => {
+      sortedMap.set(key, this._searches.getValue()[key]);
     });
 
     const sortedKeys = Array.from(sortedMap.keys()).sort((keyA, keyB) => {
@@ -63,8 +67,8 @@ export class SearchStorageService{
   public getSortedByDate() {
     const sortedMap = new Map<string, number[]>();
 
-    Object.keys(this._searches).forEach(key => {
-      sortedMap.set(key, this._searches[key]);
+    Object.keys(this._searches.getValue()).forEach(key => {
+      sortedMap.set(key, this._searches.getValue()[key]);
     });
 
     const sortedKeys = Array.from(sortedMap.keys()).sort((keyA, keyB) => {
@@ -77,8 +81,8 @@ export class SearchStorageService{
   public getFullSearchesList() {
     const sortedObjects: Record<number, number>[] = [];
 
-    Object.keys(this._searches).forEach(key => {
-      this._searches[key].forEach((value: string) => {
+    Object.keys(this._searches.getValue()).forEach(key => {
+      this._searches.getValue()[key].forEach((value: string) => {
         sortedObjects.push({ [value]: parseInt(key.toString()) });
       });
     });
