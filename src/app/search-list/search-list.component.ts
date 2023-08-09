@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { SearchStorageService } from "../services/search-storage.service";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 
 @Component({
   selector: 'app-search-list',
@@ -28,6 +28,7 @@ export class SearchListComponent implements OnInit, OnDestroy{
   }
 
   public getSortedSearchList(){
+    console.log(this.sortedBy)
     switch (this.sortedBy) {
       case 'date':
         this.searchList = this.searchStorage.getSortedByDate();
@@ -49,5 +50,10 @@ export class SearchListComponent implements OnInit, OnDestroy{
 
   public deleteItem(value: string, date: string){
     this.searchStorage.removeSearch(value, date)
+  }
+
+  public changeSortedByTo(sortBy: 'pop' | 'date'){
+    this.sortedBy = sortBy
+    this.getSortedSearchList()
   }
 }

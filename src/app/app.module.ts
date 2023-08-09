@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchListComponent } from './search-list/search-list.component';
 import { SearchFormComponent } from './search-form/search-form.component';
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -13,11 +13,12 @@ import { ReactiveFormsModule } from "@angular/forms";
     SearchListComponent,
     SearchFormComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule
-  ],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		ReactiveFormsModule,
+		FormsModule
+	],
   providers: [],
   bootstrap: [AppComponent]
 })

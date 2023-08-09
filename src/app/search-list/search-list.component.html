@@ -1,14 +1,24 @@
-<div  class="wrapper">
-  <ul class="search__list">
-    <li class="search__item" *ngFor="let item of searchList">
-      {{item}}
-<!--      <button class="search__btn-del" type="button" (click)="removeSearch($event)" [id]="item.date" *ngIf="editMode">x</button>-->
-    </li>
-  </ul>
-  <button class="search__btn-edit" type="button" (click)="showFullList()">
-    <svg fill="" version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="800px" height="800px" viewBox="0 0 45.973 45.973"
-     xml:space="preserve">
+<div class="search" *ngIf="searchList.length">
+  <div class="search__radio">
+    <label>
+      <input type="radio" [(ngModel)]="sortedBy" (click)="getSortedSearchList()" value="pop">
+      by popularity
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="sortedBy" (click)="getSortedSearchList()" value="date">
+      by date
+    </label>
+  </div>
+  <div  class="wrapper">
+    <ul class="search__list">
+      <li class="search__item" *ngFor="let item of searchList">
+        {{ item }}
+      </li>
+    </ul>
+    <button class="search__btn-edit" type="button" (click)="showFullList()">
+      <svg fill="" version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+           width="800px" height="800px" viewBox="0 0 45.973 45.973"
+           xml:space="preserve">
     <path d="M43.454,18.443h-2.437c-0.453-1.766-1.16-3.42-2.082-4.933l1.752-1.756c0.473-0.473,0.733-1.104,0.733-1.774
       c0-0.669-0.262-1.301-0.733-1.773l-2.92-2.917c-0.947-0.948-2.602-0.947-3.545-0.001l-1.826,1.815
       C30.9,6.232,29.296,5.56,27.529,5.128V2.52c0-1.383-1.105-2.52-2.488-2.52h-4.128c-1.383,0-2.471,1.137-2.471,2.52v2.607
@@ -23,14 +33,19 @@
        M22.976,30.85c-4.378,0-7.928-3.517-7.928-7.852c0-4.338,3.55-7.85,7.928-7.85c4.379,0,7.931,3.512,7.931,7.85
       C30.906,27.334,27.355,30.85,22.976,30.85z"/>
     </svg>
-  </button>
-</div>
-<div class="full" *ngIf="isVisibleFullList">
-  <button type="button" (click)="isVisibleFullList = false">close</button>
-  <ul class="full__list">
-    <li class="full__item" *ngFor="let search of searchListFull">
+    </button>
+  </div>
+  <div class="full" *ngIf="isVisibleFullList">
+    <button type="button" (click)="isVisibleFullList = false">close</button>
+    <form>
+
+    </form>
+    <ul class="full__list">
+      <li class="full__item" *ngFor="let search of searchListFull">
         {{ search.value }} | {{ search.date | date: 'dd.MM.yy HH:mm:ss' }}
-      <button type="button" (click)="deleteItem(search.value, search.date)">del</button>
-    </li>
-  </ul>
+        <button type="button" (click)="deleteItem(search.value, search.date)">del</button>
+      </li>
+    </ul>
+  </div>
+
 </div>
