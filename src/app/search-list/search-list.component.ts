@@ -11,7 +11,9 @@ export class SearchListComponent implements OnInit, OnDestroy{
   public searchStorage = inject(SearchStorageService)
   public searchList: string[] = []
   public sortedBy: 'pop' | 'date' = 'date'
+  public isVisibleFullList = false
   private _subscriptions: Subscription[] = []
+  public  searchListFull: any
 
   public ngOnInit(): void {
     this._subscriptions.push(
@@ -34,5 +36,18 @@ export class SearchListComponent implements OnInit, OnDestroy{
         this.searchList = this.searchStorage.getSortedByPopularity();
         break;
     }
+  }
+
+  public showFullList(){
+    this._subscriptions.push(
+      this.searchStorage.searches$.subscribe((searches: any) => {
+        this.searchListFull = this.searchStorage.getFullSearchesList()
+      })
+    )
+    this.isVisibleFullList = true;
+  }
+
+  public deleteItem(value: string, date: string){
+    this.searchStorage.removeSearch(value, date)
   }
 }

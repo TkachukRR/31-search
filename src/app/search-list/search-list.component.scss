@@ -18,9 +18,13 @@
   }
 
   &__btn-edit{
-    margin-left: 12px;
-    padding: 5px 10px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    padding: 1px;
     border-radius: 4px;
     cursor: pointer;
   }

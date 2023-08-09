@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { LocalStorageService } from "./local-storage.service";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, observable, Observable } from "rxjs";
 
 const LOCAL_STORAGE_KEY = "SEARCH_LIST"
 
@@ -34,7 +34,12 @@ export class SearchStorageService{
 
   public removeSearch(searchVal: string, searchDate: string) {
     this.loading = true;
-    this._searches.getValue()[searchVal] = this._searches.getValue()[searchVal].filter((date: number) => date !== +searchDate)
+    if (this._searches.getValue()[searchVal].length === 1) {
+      delete this._searches.getValue()[searchVal];
+    }
+    else {
+      this._searches.getValue()[searchVal] = this._searches.getValue()[searchVal].filter((date: number) => date !== +searchDate)
+    }
     this._localStorage.setItem(LOCAL_STORAGE_KEY, this._searches.getValue())
     this.updateSearches();
     this.loading = false;
@@ -78,19 +83,14 @@ export class SearchStorageService{
     return sortedKeys
   }
 
-  public getFullSearchesList() {
-    const sortedObjects: Record<number, number>[] = [];
+  public getFullSearchesList(): object[] {
+    const sortedObjects: {date: string, value: string}[] = [];
 
     Object.keys(this._searches.getValue()).forEach(key => {
       this._searches.getValue()[key].forEach((value: string) => {
-        sortedObjects.push({ [value]: parseInt(key.toString()) });
+        sortedObjects.push({ value: key, date: value });
       });
     });
-
-    return sortedObjects.sort((objA, objB) => {
-      const valueA = Object.keys(objA)[0];
-      const valueB = Object.keys(objB)[0];
-      return parseInt(valueB) - parseInt(valueA);
-    });
+    return sortedObjects
   }
 }
