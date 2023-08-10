@@ -1,4 +1,4 @@
 export enum SortedBy {
-  popularity= 'pop',
-  date='date'
+  popularity = 'pop',
+  date = 'date',
 }

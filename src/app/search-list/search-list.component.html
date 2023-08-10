@@ -36,16 +36,19 @@
     </button>
   </div>
   <div class="full" *ngIf="isVisibleFullList">
-    <button type="button" (click)="isVisibleFullList = false">close</button>
-    <form>
 
-    </form>
+  </div>
+
+</div>
+<div class="modal--background" *ngIf="isVisibleFullList">
+  <div class="modal--content">
+    <button type="button" (click)="isVisibleFullList = false">close</button>
     <ul class="full__list">
       <li class="full__item" *ngFor="let search of searchListFull">
         {{ search.value }} | {{ search.date | date: 'dd.MM.yy HH:mm:ss' }}
         <button type="button" (click)="deleteItem(search.value, search.date)">del</button>
       </li>
     </ul>
-  </div>
 
+  </div>
 </div>

@@ -19,6 +19,7 @@ export class SearchListComponent implements OnInit, OnDestroy{
   public isVisibleFullList = false
   public searchListFull: SingleSearch[] = []
 
+
   private _subscriptions: Subscription[] = []
 
   public ngOnInit(): void {
