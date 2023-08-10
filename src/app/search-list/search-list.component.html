@@ -17,7 +17,7 @@
     </ul>
     <button class="search__btn-edit" type="button" (click)="showFullList()">
       <svg fill="" version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-           width="800px" height="800px" viewBox="0 0 45.973 45.973"
+           width="" height="" viewBox="0 0 45.973 45.973"
            xml:space="preserve">
     <path d="M43.454,18.443h-2.437c-0.453-1.766-1.16-3.42-2.082-4.933l1.752-1.756c0.473-0.473,0.733-1.104,0.733-1.774
       c0-0.669-0.262-1.301-0.733-1.773l-2.92-2.917c-0.947-0.948-2.602-0.947-3.545-0.001l-1.826,1.815
@@ -53,8 +53,11 @@
     </div>
     <ul class="full__list">
       <li class="full__item" *ngFor="let search of searchListFull">
-        {{ search.value }} | {{ search.date | date: 'dd.MM.yy HH:mm:ss' }}
-        <button type="button" (click)="deleteItem(search.value, search.date)">del</button>
+        <span class="full__content">
+          <span>{{ search.value }}</span>
+          <span>{{ search.date | date: 'dd.MM.yy HH:mm:ss' }}</span>
+        </span>
+        <button class="full__del" type="button" (click)="deleteItem(search.value, search.date)">del</button>
       </li>
     </ul>
 

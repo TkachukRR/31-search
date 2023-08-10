@@ -18,10 +18,14 @@
     padding: 5px 10px;
     margin: 5px;
 
-    border: 1px solid #02f102;
+    border: 1px solid #007bff;
     border-radius: 4px;
 
     cursor: pointer;
+
+    &:hover{
+      background-color: #ccc;;
+    }
   }
 
   &__btn-edit{
@@ -30,10 +34,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    fill: #007bff;
 
     padding: 1px;
     border-radius: 4px;
     cursor: pointer;
+
+    &:hover svg{
+      transform: rotate(15deg);
+    }
   }
 
   &__btn-del{
@@ -45,14 +54,24 @@
 .full{
   width: 50%;
   position: absolute;
-  //transform: translate(-50%, -50%);
-
 
   &__list{
     list-style: none;
   }
 
   &__item{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__content{
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+  }
+
+  &__del {
 
   }
 }
@@ -72,6 +91,7 @@
   }
 
   &--content {
+    width: 50%;
     background-color: white;
     padding: 20px;
     border-radius: 5px;
@@ -95,6 +115,12 @@
     display: inline-block;
     border-radius: 4px;
     outline: none;
+
+    &:hover{
+      background-color: #ccc;
+      border-color: #007bff;
+      color: #007bff;
+    }
 
     & input[type="radio"] {
       display: none;
