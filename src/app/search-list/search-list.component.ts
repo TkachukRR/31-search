@@ -15,9 +15,10 @@ export class SearchListComponent implements OnInit, OnDestroy{
 
   public searchStorage = inject(SearchStorageService)
   public searchList: Search[] = []
-  public sortedBy: SortedBy = SortedBy.date
+  public sortedBy: SortedBy = SortedBy.popularity
   public isVisibleFullList = false
   public searchListFull: SingleSearch[] = []
+  public sortedFullListBy: 'searchValue' | 'searchDate' = "searchDate"
 
 
   private _subscriptions: Subscription[] = []
@@ -52,6 +53,7 @@ export class SearchListComponent implements OnInit, OnDestroy{
         this.searchListFull = this.getFullSearchesList()
       })
     )
+    this.onFullListSortedByChange()
     this.isVisibleFullList = true;
   }
 
@@ -87,8 +89,29 @@ export class SearchListComponent implements OnInit, OnDestroy{
     return searches
   }
 
-  public onSortedByChange() {
+  public onSortedByChange():void {
     this.getSortedSearchList();
+  }
+
+  public onFullListSortedByChange():void{
+    switch (this.sortedFullListBy) {
+      case 'searchDate':
+        this.searchListFull.sort((a, b) => {
+          if (a.date === b.date) {
+            return a.value.localeCompare(b.value);
+          }
+          return a.date - b.date;
+        })
+        break;
+      case 'searchValue':
+        this.searchListFull.sort((a, b) => {
+          if (a.value === b.value) {
+            return a.date - b.date;
+          }
+          return a.value.localeCompare(b.value)
+        })
+        break;
+    }
   }
 
   private _getUnsortedSearchArray(): Search[] {
