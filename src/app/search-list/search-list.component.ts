@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { SearchStorageService } from "../services/search-storage.service";
 import { Subscription } from "rxjs";
 import { Search, SearchList, SingleSearch } from "../services/interfaces";
-import { SortedBy } from "../services/enums";
+import { SortedBy, SortedByFull } from "../services/enums";
 
 @Component({
   selector: 'app-search-list',
@@ -18,8 +18,7 @@ export class SearchListComponent implements OnInit, OnDestroy{
   public sortedBy: SortedBy = SortedBy.popularity
   public isVisibleFullList = false
   public searchListFull: SingleSearch[] = []
-  public sortedFullListBy: 'searchValue' | 'searchDate' = "searchDate"
-
+  public sortedFullListBy: SortedByFull = SortedByFull.date
 
   private _subscriptions: Subscription[] = []
 
@@ -95,7 +94,7 @@ export class SearchListComponent implements OnInit, OnDestroy{
 
   public onFullListSortedByChange():void{
     switch (this.sortedFullListBy) {
-      case 'searchDate':
+      case SortedByFull.date:
         this.searchListFull.sort((a, b) => {
           if (a.date === b.date) {
             return a.value.localeCompare(b.value);
@@ -103,7 +102,7 @@ export class SearchListComponent implements OnInit, OnDestroy{
           return a.date - b.date;
         })
         break;
-      case 'searchValue':
+      case SortedByFull.value:
         this.searchListFull.sort((a, b) => {
           if (a.value === b.value) {
             return a.date - b.date;
