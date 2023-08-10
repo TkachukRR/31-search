@@ -1,10 +1,10 @@
 <div class="search" *ngIf="searchList.length">
-  <div class="search__radio">
-    <label>
+  <div class="search__radio radio__group">
+    <label class="radio__button" [class.selected]="sortedBy === SortedBy.popularity" >
       <input type="radio" [(ngModel)]="sortedBy" name="list" [value]="SortedBy.popularity" (change)="onSortedByChange()">
       by popularity
     </label>
-    <label>
+    <label class="radio__button" [class.selected]="sortedBy === SortedBy.date" >
       <input type="radio" [(ngModel)]="sortedBy" name="list" [value]="SortedBy.date" (change)="onSortedByChange()">
       by date
     </label>
@@ -43,12 +43,12 @@
 <div class="modal--background" *ngIf="isVisibleFullList">
   <div class="modal--content">
     <button type="button" (click)="isVisibleFullList = false">close</button>
-    <div class="full__sort">
-      <label>
-        <input type="radio" name="fullList" [(ngModel)]="sortedFullListBy" value="searchValue" (change)="onFullListSortedByChange()">value
+    <div class="full__sort radio__group">
+      <label class="radio__button" [class.selected]="sortedFullListBy === SortedByFull.value">
+        <input type="radio" name="fullList" [(ngModel)]="sortedFullListBy" [value]="SortedByFull.value" (change)="onFullListSortedByChange()">value
       </label>
-      <label>
-        <input type="radio" name="fullList" [(ngModel)]="sortedFullListBy" value="searchDate" (change)="onFullListSortedByChange()">date
+      <label class="radio__button" [class.selected]="sortedFullListBy === SortedByFull.date">
+        <input type="radio" name="fullList" [(ngModel)]="sortedFullListBy" [value]="SortedByFull.date" (change)="onFullListSortedByChange()">date
       </label>
     </div>
     <ul class="full__list">

@@ -123,4 +123,6 @@ export class SearchListComponent implements OnInit, OnDestroy{
 
     return allLastSearches
   }
+
+  protected readonly SortedByFull = SortedByFull;
 }
