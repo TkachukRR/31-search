@@ -12,8 +12,9 @@ export class LocalStorageService {
     localStorage.removeItem(key);
   }
 
-  public getItem(key: string): string | null {
+  public getItem(key: string): string {
     const item = localStorage.getItem(key);
-    return JSON.parse(item!) ?? null;
+    if (!item) return ''
+    return JSON.parse(item);
   }
 }

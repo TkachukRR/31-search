@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { LocalStorageService } from "./local-storage.service";
-import { BehaviorSubject, observable, Observable } from "rxjs";
+import { BehaviorSubject} from "rxjs";
+import { Searching, SearchList } from "./interfaces";
 
 const LOCAL_STORAGE_KEY = "SEARCH_LIST"
 
@@ -10,77 +11,39 @@ const LOCAL_STORAGE_KEY = "SEARCH_LIST"
 
 export class SearchStorageService{
   private _localStorage = inject(LocalStorageService);
-  private _searches: any = new BehaviorSubject<any>(this._localStorage.getItem(LOCAL_STORAGE_KEY) || {})
+  private _searches = new BehaviorSubject<any>(this._localStorage.getItem(LOCAL_STORAGE_KEY) || {})
   public searches$ = this._searches.asObservable()
-  public loading = false;
 
-  public updateSearches(){
+  public updateSearches(): void{
     this._searches.next(this._searches.getValue())
   }
 
-  public getSearches() {
-      return this._searches
+  public getSearches(): SearchList {
+    return this._searches.getValue()
   }
 
-  public addToSearches(search : {value: string, date: number}) {
-    this.loading = true;
-    if (this._searches.getValue()[search.value]) this._searches.getValue()[search.value].unshift(search.date)
-    else this._searches.getValue()[search.value] = [search.date]
+  public addToSearches({value, date} : Searching): void {
+    const searches = this._searches.getValue()
+    const isExist = searches.hasOwnProperty(value)
 
-    this._localStorage.setItem(LOCAL_STORAGE_KEY, this._searches.getValue())
+    if (isExist) searches[value].unshift(date)
+    else searches[value] = [date]
+
+    this._localStorage.setItem(LOCAL_STORAGE_KEY, searches)
     this.updateSearches();
-    this.loading = false;
   }
 
-  public removeSearch(searchVal: string, searchDate: string) {
-    this.loading = true;
-    if (this._searches.getValue()[searchVal].length === 1) {
-      delete this._searches.getValue()[searchVal];
-    }
-    else {
-      this._searches.getValue()[searchVal] = this._searches.getValue()[searchVal].filter((date: number) => date !== +searchDate)
-    }
-    this._localStorage.setItem(LOCAL_STORAGE_KEY, this._searches.getValue())
+  public removeSearch({value, date} : Searching): void {
+    const searches = this._searches.getValue()
+    const isExist = searches.hasOwnProperty(value)
+
+    if (!isExist) return
+
+    if (searches[value].length === 1) delete searches[value]
+    else searches[value] = searches[value].filter((d: number) => d !== +date)
+
+    this._localStorage.setItem(LOCAL_STORAGE_KEY, searches)
     this.updateSearches();
-    this.loading = false;
-  }
-
-  public getSortedByPopularity() {
-    const sortedMap = new Map<string, number[]>();
-
-    Object.keys(this._searches.getValue()).forEach(key => {
-      sortedMap.set(key, this._searches.getValue()[key]);
-    });
-
-    const sortedKeys = Array.from(sortedMap.keys()).sort((keyA, keyB) => {
-      const lengthDiff = sortedMap.get(keyB)!.length - sortedMap.get(keyA)!.length;
-      if (lengthDiff !== 0) {
-        return lengthDiff;
-      } else {
-        return sortedMap.get(keyB)![0] - sortedMap.get(keyA)![0];
-      }
-    });
-
-    // const sortedData = new Map<string, number[]>();
-    // sortedKeys.forEach(key => {
-    //   sortedData.set(key, sortedMap.get(key)!);
-    // });
-
-    return sortedKeys
-  }
-
-  public getSortedByDate() {
-    const sortedMap = new Map<string, number[]>();
-
-    Object.keys(this._searches.getValue()).forEach(key => {
-      sortedMap.set(key, this._searches.getValue()[key]);
-    });
-
-    const sortedKeys = Array.from(sortedMap.keys()).sort((keyA, keyB) => {
-      return sortedMap.get(keyB)![0] - sortedMap.get(keyA)![0];
-    });
-
-    return sortedKeys
   }
 
   public getFullSearchesList(): object[] {

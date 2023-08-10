@@ -1,18 +1,18 @@
 <div class="search" *ngIf="searchList.length">
   <div class="search__radio">
     <label>
-      <input type="radio" [(ngModel)]="sortedBy" (click)="getSortedSearchList()" value="pop">
+      <input type="radio" [(ngModel)]="sortedBy" (click)="getSortedSearchList()" value="SortedBy.popularity">
       by popularity
     </label>
     <label>
-      <input type="radio" [(ngModel)]="sortedBy" (click)="getSortedSearchList()" value="date">
+      <input type="radio" [(ngModel)]="sortedBy" (click)="getSortedSearchList()" value="SortedBy.date">
       by date
     </label>
   </div>
   <div  class="wrapper">
     <ul class="search__list">
       <li class="search__item" *ngFor="let item of searchList">
-        {{ item }}
+        {{ item.value }}
       </li>
     </ul>
     <button class="search__btn-edit" type="button" (click)="showFullList()">
