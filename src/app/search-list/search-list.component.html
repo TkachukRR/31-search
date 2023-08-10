@@ -1,11 +1,11 @@
 <div class="search" *ngIf="searchList.length">
   <div class="search__radio">
     <label>
-      <input type="radio" [(ngModel)]="sortedBy" (click)="getSortedSearchList()" value="SortedBy.popularity">
+      <input type="radio" [(ngModel)]="sortedBy" [value]="SortedBy.popularity" (change)="onSortedByChange()">
       by popularity
     </label>
     <label>
-      <input type="radio" [(ngModel)]="sortedBy" (click)="getSortedSearchList()" value="SortedBy.date">
+      <input type="radio" [(ngModel)]="sortedBy" [value]="SortedBy.date" (change)="onSortedByChange()">
       by date
     </label>
   </div>

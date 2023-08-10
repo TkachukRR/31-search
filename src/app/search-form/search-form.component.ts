@@ -1,9 +1,7 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { SearchStorageService } from "../services/search-storage.service";
-import { Searching } from "../services/interfaces";
-import { LocalStorageService } from "../services/local-storage.service";
-import { of } from "rxjs";
+import { SingleSearch } from "../services/interfaces";
 
 interface Search {
   searchValue: FormControl
@@ -26,7 +24,7 @@ export class SearchFormComponent {
   public onSubmit(){
     const value = this.searchingForm.get('searchValue')?.value.replace(/\s+/g, ' ').trim().toLowerCase()
 
-    const newSearch: Searching = {
+    const newSearch: SingleSearch = {
       value,
       date: Date.now()
     }

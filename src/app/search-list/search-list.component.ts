@@ -1,26 +1,25 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { SearchStorageService } from "../services/search-storage.service";
-import { Observable, Subscription } from "rxjs";
-import { LastSearch, Search, SearchList } from "../services/interfaces";
-
-export enum SortedBy {
-  popularity= 'pop',
-  date='date'
-}
+import { Subscription } from "rxjs";
+import { Search, SearchList, SingleSearch } from "../services/interfaces";
+import { SortedBy } from "../services/enums";
 
 @Component({
   selector: 'app-search-list',
   templateUrl: './search-list.component.html',
   styleUrls: ['./search-list.component.scss']
 })
+
 export class SearchListComponent implements OnInit, OnDestroy{
+  protected readonly SortedBy = SortedBy
+
   public searchStorage = inject(SearchStorageService)
   public searchList: Search[] = []
-  public sortedBy: SortedBy = SortedBy.popularity
+  public sortedBy: SortedBy = SortedBy.date
   public isVisibleFullList = false
+  public searchListFull: SingleSearch[] = []
+
   private _subscriptions: Subscription[] = []
-  public searchListFull: any
-  public sortedSearchList:any =[]
 
   public ngOnInit(): void {
     this.getSortedByDate()
@@ -36,7 +35,6 @@ export class SearchListComponent implements OnInit, OnDestroy{
   }
 
   public getSortedSearchList(){
-    console.log(this.sortedBy)
     switch (this.sortedBy) {
       case SortedBy.date:
         this.searchList = this.getSortedByDate();
@@ -50,7 +48,7 @@ export class SearchListComponent implements OnInit, OnDestroy{
   public showFullList(){
     this._subscriptions.push(
       this.searchStorage.searches$.subscribe((searches: any) => {
-        this.searchListFull = this.searchStorage.getFullSearchesList()
+        this.searchListFull = this.getFullSearchesList()
       })
     )
     this.isVisibleFullList = true;
@@ -60,13 +58,8 @@ export class SearchListComponent implements OnInit, OnDestroy{
     this.searchStorage.removeSearch({value, date})
   }
 
-  public changeSortedByTo(sortBy: SortedBy){
-    this.sortedBy = sortBy
-    this.getSortedSearchList()
-  }
-
   public getSortedByDate(): Search[] {
-    const unsortedSearchArray: Search[] = this.getUnsortedSearchArray()
+    const unsortedSearchArray: Search[] = this._getUnsortedSearchArray()
 
     return unsortedSearchArray.slice().sort((a: Search, b: Search) => {
       return b.date[0] - a.date[0]
@@ -74,7 +67,7 @@ export class SearchListComponent implements OnInit, OnDestroy{
   }
 
   public getSortedByPopularity(): Search[] {
-    const unsortedSearchArray: Search[] = this.getUnsortedSearchArray()
+    const unsortedSearchArray: Search[] = this._getUnsortedSearchArray()
 
     return unsortedSearchArray.slice().sort((a: Search, b: Search) => {
       if (b.date.length === a.date.length) return b.date[0] - a.date[0]
@@ -82,7 +75,22 @@ export class SearchListComponent implements OnInit, OnDestroy{
     })
   }
 
-  private getUnsortedSearchArray(): Search[] {
+  public getFullSearchesList(): SingleSearch[] {
+    const unsortedSearchArray: Search[] = this._getUnsortedSearchArray()
+    const searches: SingleSearch[] = [];
+
+    unsortedSearchArray.map((search: Search) => {
+      search.date.map(date => searches.push({value: search.value, date}))
+    })
+
+    return searches
+  }
+
+  public onSortedByChange() {
+    this.getSortedSearchList();
+  }
+
+  private _getUnsortedSearchArray(): Search[] {
     const unsortedSearches: SearchList = this.searchStorage.getSearches();
     const allLastSearches = [];
 
@@ -92,6 +100,4 @@ export class SearchListComponent implements OnInit, OnDestroy{
 
     return allLastSearches
   }
-
-
 }

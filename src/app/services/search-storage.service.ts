@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { LocalStorageService } from "./local-storage.service";
 import { BehaviorSubject} from "rxjs";
-import { Searching, SearchList } from "./interfaces";
+import { SearchList, SingleSearch } from "./interfaces";
 
 const LOCAL_STORAGE_KEY = "SEARCH_LIST"
 
@@ -22,7 +22,7 @@ export class SearchStorageService{
     return this._searches.getValue()
   }
 
-  public addToSearches({value, date} : Searching): void {
+  public addToSearches({value, date} : SingleSearch): void {
     const searches = this._searches.getValue()
     const isExist = searches.hasOwnProperty(value)
 
@@ -33,7 +33,7 @@ export class SearchStorageService{
     this.updateSearches();
   }
 
-  public removeSearch({value, date} : Searching): void {
+  public removeSearch({value, date} : SingleSearch): void {
     const searches = this._searches.getValue()
     const isExist = searches.hasOwnProperty(value)
 
@@ -44,16 +44,5 @@ export class SearchStorageService{
 
     this._localStorage.setItem(LOCAL_STORAGE_KEY, searches)
     this.updateSearches();
-  }
-
-  public getFullSearchesList(): object[] {
-    const sortedObjects: {date: string, value: string}[] = [];
-
-    Object.keys(this._searches.getValue()).forEach(key => {
-      this._searches.getValue()[key].forEach((value: string) => {
-        sortedObjects.push({ value: key, date: value });
-      });
-    });
-    return sortedObjects
   }
 }
